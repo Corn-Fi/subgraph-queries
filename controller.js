@@ -45,9 +45,28 @@ async function getUserData(user) {
     return result
 }
 
+async function viewAllOrders() {
+    let result = await request(API_URL,
+        gql`{
+                orders {
+                    orderId
+                    fromToken
+                    toToken
+                    amountIn
+                    desiredAmountOut
+                    amountOut
+                    expiration
+                    open
+                    timestamp
+                }
+            }`
+    );
+    return result
+}
+
 async function main() {
-    const userData = await getUserData("0x43b02cdf22d0de535279507cf597969ce82198af");
-    console.log(userData)
+    const order = await viewAllOrders();
+    console.log(order)
 }
 
 main()
