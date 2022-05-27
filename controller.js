@@ -64,8 +64,35 @@ async function viewAllOrders() {
     return result
 }
 
+
+async function userOrders(user) {
+    let result = await request(API_URL,
+        gql`{
+                orders(where: {owner:"${user}"}) {
+                    orderId
+                    fromToken
+                    toToken
+                    amountIn
+                    desiredAmountOut
+                    amountOut
+                    expiration
+                    open
+                    timestamp
+                        owner
+                        strategy {
+                    id
+                    name
+                    }
+                }
+            }`
+    );
+    return result
+}
+
+
+
 async function main() {
-    const order = await viewAllOrders();
+    const order = await userOrders("0x43b02cdf22d0de535279507cf597969ce82198af");
     console.log(order)
 }
 
