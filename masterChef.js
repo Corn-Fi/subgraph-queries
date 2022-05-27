@@ -17,7 +17,7 @@ async function getUserPoolAmounts(user) {
 }
 
 async function getPoolAmounts() {
-    const result = await request(API_URL,
+    let result = await request(API_URL,
         gql`{
                 pools(orderBy: id) {
                     id
