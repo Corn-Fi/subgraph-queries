@@ -1,0 +1,14 @@
+{
+  "name": "subgraph-queries",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Corn-Fi/subgraph-queries.git",
+  "author": "Korey Corkscrew <77598913+korey-corkscrew@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "graphql-request": "^4.2.0"
+  },
+  "devDependencies": {
+    "graphql": "^16.5.0"
+  }
+}
