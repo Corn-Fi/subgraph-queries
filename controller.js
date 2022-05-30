@@ -65,10 +65,10 @@ async function viewAllOrders() {
 }
 
 
-async function userOrders(user) {
+async function userOpenOrders(user) {
     let result = await request(API_URL,
         gql`{
-                orders(where: {owner:"${user}"}) {
+                orders(where: {owner:"${user}", open: true}) {
                     orderId
                     fromToken
                     toToken
@@ -78,10 +78,13 @@ async function userOrders(user) {
                     expiration
                     open
                     timestamp
-                        owner
-                        strategy {
-                    id
-                    name
+                    owner
+                    strategy {
+                        id
+                        name
+                    }
+                    trade {
+                        tradeId
                     }
                 }
             }`
@@ -92,7 +95,7 @@ async function userOrders(user) {
 
 
 async function main() {
-    const order = await userOrders("0x43b02cdf22d0de535279507cf597969ce82198af");
+    const order = await getUserData("0x43b02cdf22d0de535279507cf597969ce82198af");
     console.log(order)
 }
 
