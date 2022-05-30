@@ -2,29 +2,19 @@ const { request, gql } = require('graphql-request');
 
 const API_URL = 'https://api.thegraph.com/subgraphs/name/kcorkscrew/controller'
 
-// Get user strategy tokens - WORKING
-async function getUserStrategyTokens(user) {
-    let result = await request(API_URL,
+
+
+async function userOpenTokens(user) {
+    const result = await request(API_URL,
         gql`{
-                strategyTokens(where: {owner: "${user}"}) {
+            users(where: {id: "${user}"}, first: 100) {
+                strategyTokens(where: {open: true}) {
+                    strategyId
                     tokenId
-                    strategy {
-                    id
-                    address
-                    name
+                    erc20 {
+                        address
+                        amount
                     }
-                }
-            }`
-    );
-    return result
-}
-
-
-// Get all user data (strategy tokens, trades, orders) - NOT WORKING
-async function getUserData(user) {
-    let result = await request(API_URL,
-        gql`{
-                strategyTokens(where: {owner: "${user}"}) {
                     trades {
                         tradeId
                         orders {
@@ -40,62 +30,64 @@ async function getUserData(user) {
                         }
                     }
                 }
-            }`
+            }
+        }`
     );
-    return result
-}
 
-async function viewAllOrders() {
-    let result = await request(API_URL,
-        gql`{
-                orders {
-                    orderId
-                    fromToken
-                    toToken
-                    amountIn
-                    desiredAmountOut
-                    amountOut
-                    expiration
-                    open
-                    timestamp
-                }
-            }`
-    );
-    return result
+    return result.users[0]
 }
 
 
-async function userOpenOrders(user) {
-    let result = await request(API_URL,
+async function userClosedTokens(user) {
+    const result = await request(API_URL,
         gql`{
-                orders(where: {owner:"${user}", open: true}) {
-                    orderId
-                    fromToken
-                    toToken
-                    amountIn
-                    desiredAmountOut
-                    amountOut
-                    expiration
-                    open
-                    timestamp
-                    owner
-                    strategy {
-                        id
-                        name
+            users(where: {id: "${user}"}, first: 100) {
+                strategyTokens(where: {open: false}) {
+                    strategyId
+                    tokenId
+                    erc20 {
+                        address
+                        amount
                     }
-                    trade {
+                    trades {
                         tradeId
+                        orders {
+                            orderId
+                            fromToken
+                            toToken
+                            amountIn
+                            desiredAmountOut
+                            amountOut
+                            expiration
+                            open
+                            timestamp
+                        }
                     }
                 }
-            }`
+            }
+        }`
     );
+
+    return result.users[0]
+}
+
+async function userTotalDepositedAmounts(user) {
+    const result = await request(API_URL,
+        gql`{
+            erc20S(where: {owner: "${user}", amount_not: 0}) {
+                address
+                amount
+            }
+        }`
+    );
+
     return result
 }
 
 
 
 async function main() {
-    const order = await getUserData("0x43b02cdf22d0de535279507cf597969ce82198af");
+    const order = await userTotalDepositedAmounts("0x43b02cdf22d0de535279507cf597969ce82198af");
     console.log(order)
 }
 
