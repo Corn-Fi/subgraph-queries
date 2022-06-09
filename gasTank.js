@@ -1,15 +1,14 @@
 const { request, gql } = require('graphql-request');
-
-const API_URL = 'https://api.thegraph.com/subgraphs/name/kcorkscrew/trades'
+const { GAS_TANK_API_URL } = require("./constants");
 
 async function getUserData(user) {
-    let result = await request(API_URL,
+    let result = await request(GAS_TANK_API_URL,
         gql`{
-                payers(where: {id: "${user}"}) {
-                    amountDeposited
-                    totalAmountSpent
-                }
-            }`
+            payers(where: {id: "${user}"}) {
+                amountDeposited
+                totalAmountSpent
+            }
+        }`
     );
     result = result.payers[0]
     return {
@@ -18,14 +17,6 @@ async function getUserData(user) {
     }
 }
 
-async function main() {
-    const userData = await getUserData("0x43b02cdf22d0de535279507cf597969ce82198af");
-    console.log(userData)
+module.exports = {
+    getUserData
 }
-
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });

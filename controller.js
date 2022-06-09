@@ -1,11 +1,9 @@
 const { request, gql } = require('graphql-request');
-
-const API_URL = 'https://api.thegraph.com/subgraphs/name/kcorkscrew/controller'
-
+const { CONTROLLER_API_URL } = require("./constants")
 
 
 async function userOpenTokens(user) {
-    const result = await request(API_URL,
+    const result = await request(CONTROLLER_API_URL,
         gql`{
             users(where: {id: "${user}"}, first: 100) {
                 strategyTokens(where: {open: true}) {
@@ -39,7 +37,7 @@ async function userOpenTokens(user) {
 
 
 async function userClosedTokens(user) {
-    const result = await request(API_URL,
+    const result = await request(CONTROLLER_API_URL,
         gql`{
             users(where: {id: "${user}"}, first: 100) {
                 strategyTokens(where: {open: false}) {
@@ -72,7 +70,7 @@ async function userClosedTokens(user) {
 }
 
 async function userTotalDepositedAmounts(user) {
-    const result = await request(API_URL,
+    const result = await request(CONTROLLER_API_URL,
         gql`{
             erc20S(where: {owner: "${user}", amount_not: 0}) {
                 address
@@ -84,16 +82,8 @@ async function userTotalDepositedAmounts(user) {
     return result
 }
 
-
-
-async function main() {
-    const order = await userTotalDepositedAmounts("0x43b02cdf22d0de535279507cf597969ce82198af");
-    console.log(order)
+module.exports = {
+    userOpenTokens,
+    userClosedTokens,
+    userTotalDepositedAmounts
 }
-
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });

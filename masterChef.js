@@ -1,43 +1,53 @@
 const { request, gql } = require('graphql-request');
+const { MASTERCHEF_API_URL } = require("./constants")
 
-const API_URL = 'https://api.thegraph.com/subgraphs/name/kcorkscrew/polygon'
-
-async function getUserPoolAmounts(user) {
-    const result = await request(API_URL,
+async function getUserData(user) {
+    const result = await request(MASTERCHEF_API_URL,
         gql`{
-                pools(orderBy:id) {
+            poolUsers(where: {user: "${user}"}) {
+                pool {
                     id
-                    users(where: {address:"${user}"}){
-                        amount
-                    }
                 }
-            }`
+                depositAmount
+            }
+        }`
     );
     return result
 }
 
-async function getPoolAmounts() {
-    let result = await request(API_URL,
+async function getMasterChefData() {
+    let result = await request(MASTERCHEF_API_URL,
         gql`{
-                pools(orderBy: id) {
-                    id
-                    pair
-                    balance
-                }
-            }`
-    );
+            masterchefs {
+                id
+                poolCount
+                cobPerBlock
+                userCount
+                tvl
+                totalAllocationPoints
+            }
+            pools {
+                id
+                token
+                name
+                symbol
+                decimals
+                lp
+                userCount
+                totalDeposited
+                priceUSD
+                tvl
+                allocationPoint
+                apy
+                depositFee
+                timestamp
+            }
+        }`
+    )
     return result
 }
 
-async function main() {
-    const userPoolAmounts = await getUserPoolAmounts("0x79297c94d382cca69af6ca3782907d7a461f9031");
-    const poolAmounts = await getPoolAmounts()
-    console.log(poolAmounts)
+module.exports = {
+    getUserData,
+    getMasterChefData
 }
-
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
