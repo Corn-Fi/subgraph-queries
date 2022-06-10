@@ -12,7 +12,14 @@ async function getUserData(user) {
             }
         }`
     );
-    return result
+    let pools = []
+    for(let i = 0; i < result.poolUsers.length; i ++) {
+        pools.push({
+            poolId: result.poolUsers[i].pool.id,
+            amount: result.poolUsers[i].depositAmount
+        })
+    }
+    return pools
 }
 
 async function getMasterChefData() {

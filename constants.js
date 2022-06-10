@@ -1,4 +1,4 @@
-const CONTROLLER_API_URL = 'https://api.thegraph.com/subgraphs/name/kcorkscrew/controller'
+const CONTROLLER_API_URL = 'https://api.thegraph.com/subgraphs/name/korey-corkscrew/controller'
 const GAS_TANK_API_URL = 'https://api.thegraph.com/subgraphs/name/kcorkscrew/trades'
 const MASTERCHEF_API_URL = 'https://api.thegraph.com/subgraphs/name/korey-corkscrew/masterchef-v1'
 
