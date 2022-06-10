@@ -7,19 +7,27 @@ async function getUserData(user) {
             poolUsers(where: {user: "${user}"}) {
                 pool {
                     id
+                    priceUSD
                 }
                 depositAmount
             }
         }`
     );
     let pools = []
+    let totalValue = 0
     for(let i = 0; i < result.poolUsers.length; i ++) {
+        let value = result.poolUsers[i].depositAmount * result.poolUsers[i].pool.priceUSD
         pools.push({
             poolId: result.poolUsers[i].pool.id,
-            amount: result.poolUsers[i].depositAmount
+            amount: result.poolUsers[i].depositAmount,
+            valueUSD: value
         })
+        totalValue += value
     }
-    return pools
+    return {
+        totalUserValueUSD: totalValue,
+        pools: pools
+    }
 }
 
 async function getMasterChefData() {
@@ -51,7 +59,15 @@ async function getMasterChefData() {
             }
         }`
     )
-    return result
+    return {
+        address: result.masterchefs[0].id,
+        poolCount: result.masterchefs[0].poolCount,
+        cobPerBlock: result.masterchefs[0].cobPerBlock,
+        userCount: result.masterchefs[0].userCount,
+        tvl: result.masterchefs[0].tvl,
+        totalAllocationPoints: result.masterchefs[0].totalAllocationPoints,
+        pools: result.pools
+    }
 }
 
 module.exports = {
