@@ -1,9 +1,9 @@
 const { userClosedTokens, userData, controllerData } = require("./controller")
-// const { getUserData } = require("./gasTank")
+const { getUserGasTankData } = require("./gasTank")
 const { getUserData, getMasterChefData } = require("./masterChef")
 
 async function main() {
-    const user = "0xceda4ba64fabc1c572f95805170d1e5b0bc29782"
+    const user = "0x43b02cdf22d0de535279507cf597969ce82198af"
 
     // user current trade data
     const userTradeData = await userData(user);
@@ -17,10 +17,14 @@ async function main() {
     // user pool data
     const userPoolData = await getUserData(user)
 
+    // user gas tank data
+    const userGasTankData = await getUserGasTankData(user)
+
     console.log(userTradeData)
     console.log(controllerTradeData)
-    console.log(masterchefData)
-    console.log(userPoolData)
+    console.log(userGasTankData)
+    // console.log(masterchefData)
+    // console.log(userPoolData)
 }
 
 main()

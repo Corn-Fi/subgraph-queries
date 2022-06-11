@@ -1,7 +1,7 @@
 const { request, gql } = require('graphql-request');
 const { GAS_TANK_API_URL } = require("./constants");
 
-async function getUserData(user) {
+async function getUserGasTankData(user) {
     let result = await request(GAS_TANK_API_URL,
         gql`{
             payers(where: {id: "${user}"}) {
@@ -18,5 +18,5 @@ async function getUserData(user) {
 }
 
 module.exports = {
-    getUserData
+    getUserGasTankData
 }

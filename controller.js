@@ -139,10 +139,12 @@ async function controllerData() {
                 openOrderCount
                 filledOrderCount
                 totalValueUSD
+                totalVolumeDepositedUSD
+                totalVolumeFilledUSD
             }
         }`
     );
-    return result
+    return result.controllers[0]
 }
 
 module.exports = {
