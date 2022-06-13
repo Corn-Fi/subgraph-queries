@@ -17,6 +17,20 @@ async function getUserGasTankData(user) {
     }
 }
 
+async function getUserApproval(user, payee) {
+    let result = await request(GAS_TANK_API_URL,
+        gql`{
+            payers(where: {id: "${user}"}) {
+                payees(where: {payee: "${payee}"}) {
+                    approved
+                }
+            }
+        }`
+    );
+    return result.payers[0].payees[0].approved
+}
+
 module.exports = {
-    getUserGasTankData
+    getUserGasTankData,
+    getUserApproval
 }
