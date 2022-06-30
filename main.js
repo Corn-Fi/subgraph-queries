@@ -3,7 +3,7 @@ const { getUserGasTankData, getUserApproval } = require("./gasTank")
 const { getUserData, getMasterChefData } = require("./masterChef")
 
 async function main() {
-    const user = "0x43b02cdf22d0de535279507cf597969ce82198af"
+    const user = ""
     const controller = "0x678753f5b53bfbf1d4dcfbb0f33ab5c2161eddf2"
 
     // user current trade data
